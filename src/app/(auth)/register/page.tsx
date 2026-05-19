@@ -14,8 +14,12 @@ import { useForm } from "react-hook-form";
 import { registerUser } from "@/services/user.service.";
 import { registForm } from "@/types/auth";
 import { toast } from "sonner";
+import { useState } from "react";
+import { Eye, EyeClosed } from "lucide-react";
 
 function RegistUi() {
+  const [visiblePass, setVisiblePass] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -86,12 +90,21 @@ function RegistUi() {
               <FieldDescription>
                 Must be at least 8 characters long.
               </FieldDescription>
-              <Input
-                id='password'
-                type='password'
-                placeholder='••••••••'
-                {...register("password", { required: "password required" })}
-              />
+              <div className='flex flex-row gap-1'>
+                <Input
+                  id='password'
+                  type={visiblePass ? `text` : `password`}
+                  placeholder={visiblePass ? `password` : `••••••••`}
+                  {...register("password", { required: "password required" })}
+                />
+                <Button
+                  type='button'
+                  className='cursor-pointer'
+                  onClick={() => setVisiblePass(!visiblePass)}
+                >
+                  {visiblePass ? <Eye /> : <EyeClosed />}
+                </Button>
+              </div>
               {errors.password && (
                 <p className='mt-1 text-sm text-red-600'>
                   {errors.password.message}
