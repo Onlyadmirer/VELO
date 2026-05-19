@@ -100,6 +100,7 @@ function RegistUi() {
                   {...register("password", { required: "password required" })}
                 />
                 <Button
+                  variant={"outline"}
                   type='button'
                   className='cursor-pointer'
                   onClick={() => setVisiblePass(!visiblePass)}
