@@ -11,26 +11,34 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { registerUser } from "@/services/auth";
+import { registerUser } from "@/services/user.service.";
 import { registForm } from "@/types/auth";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Eye, EyeClosed } from "lucide-react";
 
 function RegistUi() {
+  const [visiblePass, setVisiblePass] = useState(false);
+
   const {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<registForm>();
 
   async function onSubmit(formData: registForm) {
     try {
-      const result = await registerUser(formData);
-      console.log(result);
+      const response = await registerUser(formData);
+      toast.success(response);
+      reset();
     } catch (error) {
-      console.log(error);
-
       if (error instanceof Error) {
-        setError("root", { type: "server", message: error.message });
+        setError("root", {
+          type: "server",
+          message: error.message,
+        });
       }
     }
   }
@@ -38,8 +46,10 @@ function RegistUi() {
   return (
     <div className=' m-auto relative min-h-screen flex flex-col justify-center space-y-8'>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-8 p-8'>
-        <div className='space-y-2'>
-          <h1 className='font-bold text-4xl'>Welcome to VELO!</h1>
+        <div className='space-y-3'>
+          <h1 className='text-4xl font-extrabold tracking-tight text-balance'>
+            Welcome to VELO!
+          </h1>
           <p className='text-sm leading-none font-medium text-accent-foreground/70'>
             please regist first to join in VELO.
           </p>
@@ -82,12 +92,22 @@ function RegistUi() {
               <FieldDescription>
                 Must be at least 8 characters long.
               </FieldDescription>
-              <Input
-                id='password'
-                type='password'
-                placeholder='••••••••'
-                {...register("password", { required: "password required" })}
-              />
+              <div className='flex flex-row gap-1'>
+                <Input
+                  id='password'
+                  type={visiblePass ? `text` : `password`}
+                  placeholder={visiblePass ? `password` : `••••••••`}
+                  {...register("password", { required: "password required" })}
+                />
+                <Button
+                  variant={"outline"}
+                  type='button'
+                  className='cursor-pointer'
+                  onClick={() => setVisiblePass(!visiblePass)}
+                >
+                  {visiblePass ? <Eye /> : <EyeClosed />}
+                </Button>
+              </div>
               {errors.password && (
                 <p className='mt-1 text-sm text-red-600'>
                   {errors.password.message}
