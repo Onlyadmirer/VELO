@@ -11,26 +11,30 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { registerUser } from "@/services/auth";
+import { registerUser } from "@/services/user.service.";
 import { registForm } from "@/types/auth";
+import { toast } from "sonner";
 
 function RegistUi() {
   const {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm<registForm>();
 
   async function onSubmit(formData: registForm) {
     try {
-      const result = await registerUser(formData);
-      console.log(result);
+      const response = await registerUser(formData);
+      toast.success(response);
+      reset();
     } catch (error) {
-      console.log(error);
-
       if (error instanceof Error) {
-        setError("root", { type: "server", message: error.message });
+        setError("root", {
+          type: "server",
+          message: error.message,
+        });
       }
     }
   }
