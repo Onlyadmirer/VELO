@@ -2,8 +2,33 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { verifyEmail } from "@/services/user.service.";
 
-function page() {
+function VerifyEmailPage() {
+  const params = useSearchParams();
+
+  useEffect(() => {
+    const token = params.get("token");
+    if (!token) {
+      return;
+    }
+
+    async function verify() {
+      try {
+        const response = await verifyEmail(token as string);
+        toast.success(response);
+      } catch (error) {
+        toast.error("Unexpected Token");
+        console.log(error);
+      }
+    }
+
+    verify();
+  }, [params]);
+
   return (
     <div className='m-auto flex flex-col  items-center'>
       <div className='h-68 w-68 relative '>
@@ -26,4 +51,4 @@ function page() {
   );
 }
 
-export default page;
+export default VerifyEmailPage;

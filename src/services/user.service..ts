@@ -15,3 +15,17 @@ export async function registerUser(data: registForm) {
     throw new Error("Unexpected Error")
   }
 }
+
+export async function verifyEmail(token: string) {
+  try {
+    const response = await api.get<RegisterResponse>(`/users/verify?token=${token}`)
+    return response.data.message
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message)
+    }
+
+    throw new Error("Unexpected Error")
+  }
+}
+
