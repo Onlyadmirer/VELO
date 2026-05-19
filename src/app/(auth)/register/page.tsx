@@ -46,8 +46,10 @@ function RegistUi() {
   return (
     <div className=' m-auto relative min-h-screen flex flex-col justify-center space-y-8'>
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-8 p-8'>
-        <div className='space-y-2'>
-          <h1 className='font-bold text-4xl'>Welcome to VELO!</h1>
+        <div className='space-y-3'>
+          <h1 className='text-4xl font-extrabold tracking-tight text-balance'>
+            Welcome to VELO!
+          </h1>
           <p className='text-sm leading-none font-medium text-accent-foreground/70'>
             please regist first to join in VELO.
           </p>
