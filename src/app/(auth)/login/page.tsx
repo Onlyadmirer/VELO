@@ -110,7 +110,7 @@ function Login() {
         </div>
         <div>
           <p className='text-center text-sm'>
-            Don`t have an Account? <Link href={""}>Sign in</Link>
+            Don`t have an Account? <Link href={"/register"}>Sign in</Link>
           </p>
         </div>
       </form>
