@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { verifyEmail } from "@/services/user.service.";
+import Link from "next/link";
 
 function VerifyEmailPage() {
   const params = useSearchParams();
@@ -43,9 +44,11 @@ function VerifyEmailPage() {
         <h1 className='text-center'>
           Your email has been verified successfully.
         </h1>
-        <Button className='cursor-pointer w-1/2' type='button'>
-          Login Now
-        </Button>
+        <Link href={"/login"} className='cursor-pointer w-1/2'>
+          <Button className='cursor-pointer w-full' type='button'>
+            Login Now
+          </Button>
+        </Link>
       </div>
     </div>
   );
