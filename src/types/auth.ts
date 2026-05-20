@@ -5,10 +5,15 @@ type registForm = {
   password: string
 }
 
-type RegisterResponse = {
+type AuthResponse = {
   message: string
   status: number
 }
 
+type LoginForm = {
+  email: string
+  password: string
+}
 
-export type { registForm, RegisterResponse }
+
+export type { registForm, AuthResponse, LoginForm }
