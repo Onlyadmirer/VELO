@@ -127,7 +127,7 @@ function RegistUi() {
         </div>
         <div>
           <p className='text-center text-sm'>
-            Already have an Account? <Link href={""}>Log in</Link>
+            Already have an Account? <Link href={"/login"}>Log in</Link>
           </p>
         </div>
       </form>
