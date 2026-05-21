@@ -1,10 +1,11 @@
+import Layout from "@/components/layouts/Layout";
 import React from "react";
 
 function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <main>{children}</main>
-    </div>
+    <>
+      <Layout>{children}</Layout>
+    </>
   );
 }
 
