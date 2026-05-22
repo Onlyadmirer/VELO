@@ -42,3 +42,17 @@ export async function verifyEmail(token: string) {
   }
 }
 
+export async function getUserProfile() {
+  try {
+    const response = await api.get("/users/me")
+    return response.data.data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message)
+    }
+
+    throw new Error("Unexpected Error")
+  }
+}
+
+
