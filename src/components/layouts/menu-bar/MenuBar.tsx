@@ -18,7 +18,7 @@ function MenuBar({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className='flex flex-row gap-2 top-0 px-4 bg-background sticky h-16 shrink-0 items-center'>
+        <header className='flex flex-row gap-2 top-0 px-4 bg-background sticky z-99 h-16 shrink-0 items-center'>
           <div className=' flex flex-row gap-2 w-full'>
             <div className='flex items-center gap-2'>
               <SidebarTrigger className='-ml-1' />
