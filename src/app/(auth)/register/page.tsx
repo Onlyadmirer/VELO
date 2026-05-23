@@ -25,7 +25,7 @@ function RegistUi() {
     handleSubmit,
     setError,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<registForm>();
 
   async function onSubmit(formData: registForm) {
@@ -50,7 +50,7 @@ function RegistUi() {
           <h1 className='text-4xl font-extrabold tracking-tight text-balance'>
             Welcome to VELO!
           </h1>
-          <p className='text-sm leading-none font-medium text-accent-foreground/70'>
+          <p className='text-sm text-center leading-none font-medium text-accent-foreground/70'>
             please regist first to join in VELO.
           </p>
         </div>
@@ -62,6 +62,7 @@ function RegistUi() {
                 id='name'
                 type='text'
                 placeholder='Max Leiter'
+                disabled={isSubmitting}
                 {...register("name", { required: "name required" })}
               />
               {errors.name && (
@@ -79,6 +80,7 @@ function RegistUi() {
                 id='email'
                 type='email'
                 placeholder='akmal@gmail.com'
+                disabled={isSubmitting}
                 {...register("email", { required: "email required" })}
               />
               {errors.email && (
@@ -97,12 +99,14 @@ function RegistUi() {
                   id='password'
                   type={visiblePass ? `text` : `password`}
                   placeholder={visiblePass ? `password` : `••••••••`}
+                  disabled={isSubmitting}
                   {...register("password", { required: "password required" })}
                 />
                 <Button
                   variant={"outline"}
                   type='button'
                   className='cursor-pointer'
+                  disabled={isSubmitting}
                   onClick={() => setVisiblePass(!visiblePass)}
                 >
                   {visiblePass ? <Eye /> : <EyeClosed />}
@@ -121,13 +125,23 @@ function RegistUi() {
         </FieldSet>
         <div>
           <hr className='mt-4 mb-4' />
-          <Button type='submit' className='w-full cursor-pointer'>
+          <Button
+            disabled={isSubmitting}
+            type='submit'
+            className='w-full cursor-pointer'
+          >
             Regiter
           </Button>
         </div>
         <div>
           <p className='text-center text-sm'>
-            Already have an Account? <Link href={"/login"}>Log in</Link>
+            Already have an Account?{" "}
+            <Link
+              className={`${isSubmitting ? "pointer-events-none" : ""}`}
+              href={"/login"}
+            >
+              Log in
+            </Link>
           </p>
         </div>
       </form>
