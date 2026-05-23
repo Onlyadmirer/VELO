@@ -18,19 +18,19 @@ export default function HeroSection() {
       <div className='flex p-8 z-10 relative flex-col gap-6 justify-center items-center text-center md:text-start md:items-start md:justify-end h-full'>
         <div className='flex flex-col gap-2'>
           <h1 className='sm:text-6xl tracking-tight text-4xl text-neutral-50'>
-            Gaya Terbaru Untuk Anda
+            Latest Styles for You
           </h1>
           <p className='sm:text-2xl tracking-tight text-xl text-neutral-50'>
-            Diskon hingga 50% untuk koleksi pilihan
+            Up to 50% off select collections
           </p>
         </div>
         <div className='flex flex-row gap-4'>
           <Button className='rounded-lg'>
-            Belanja Sekarang
+            Shop Now
             <ArrowRight className='translate-y-0.5' />
           </Button>
           <Button className='rounded-lg' variant={"outline"}>
-            Lihat Koleksi
+            View Collection
           </Button>
         </div>
       </div>
