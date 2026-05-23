@@ -16,16 +16,18 @@ import { registForm } from "@/types/auth";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function Login() {
   const [visiblePass, setVisiblePass] = useState(false);
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     setError,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<registForm>();
 
   async function onSubmit(formData: registForm) {
@@ -33,6 +35,7 @@ function Login() {
       const response = await loginUser(formData);
       toast.success(response);
       reset();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) {
         setError("root", {
@@ -50,7 +53,7 @@ function Login() {
           <h1 className='text-4xl font-extrabold tracking-tight text-balance'>
             Welcome to VELO!
           </h1>
-          <p className='text-sm leading-none font-medium text-accent-foreground/70'>
+          <p className='text-sm text-center leading-none font-medium text-accent-foreground/70'>
             please login to get in VELO.
           </p>
         </div>
@@ -61,6 +64,7 @@ function Login() {
               <Input
                 id='email'
                 type='email'
+                disabled={isSubmitting}
                 placeholder='akmal@gmail.com'
                 {...register("email", { required: "email required" })}
               />
@@ -78,6 +82,7 @@ function Login() {
               <div className='flex flex-row gap-1'>
                 <Input
                   id='password'
+                  disabled={isSubmitting}
                   type={visiblePass ? `text` : `password`}
                   placeholder={visiblePass ? `password` : `••••••••`}
                   {...register("password", { required: "password required" })}
@@ -85,6 +90,7 @@ function Login() {
                 <Button
                   variant={"outline"}
                   type='button'
+                  disabled={isSubmitting}
                   className='cursor-pointer'
                   onClick={() => setVisiblePass(!visiblePass)}
                 >
@@ -104,13 +110,23 @@ function Login() {
         </FieldSet>
         <div>
           <hr className='mt-4 mb-4' />
-          <Button type='submit' className='w-full cursor-pointer'>
+          <Button
+            disabled={isSubmitting}
+            type='submit'
+            className='w-full cursor-pointer'
+          >
             Login
           </Button>
         </div>
         <div>
           <p className='text-center text-sm'>
-            Don`t have an Account? <Link href={"/register"}>Sign in</Link>
+            Don`t have an Account?{" "}
+            <Link
+              className={`${isSubmitting ? "pointer-events-none" : ""}`}
+              href={"/register"}
+            >
+              Sign in
+            </Link>
           </p>
         </div>
       </form>
