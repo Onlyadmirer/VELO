@@ -16,7 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { getUserProfile } from "@/services/user.service.";
+import { getUserProfile } from "@/services/user.service";
 import { Users } from "@/types/user";
 import {
   ChevronsUpDownIcon,

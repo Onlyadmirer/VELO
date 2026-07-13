@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { verifyEmail } from "@/services/user.service.";
+import { verifyEmail } from "@/services/user.service";
 import Link from "next/link";
 
 function VerifyEmailPage() {

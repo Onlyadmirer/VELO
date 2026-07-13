@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { loginUser } from "@/services/user.service.";
+import { loginUser } from "@/services/user.service";
 import { registForm } from "@/types/auth";
 import { toast } from "sonner";
 import { useState } from "react";
