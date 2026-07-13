@@ -5,7 +5,7 @@ import Service from "./components/Service";
 export default function Home() {
   return (
     <div className='flex min-h-screen flex-col '>
-      <div className='flex flex-col h-[calc(100dvh-4rem)] gap-4 p-4 pt-0'>
+      <div className='flex flex-col md:h-[calc(100dvh-4rem)] gap-4 p-4 pt-0'>
         <HeroSection />
         <FeaturedCollection />
       </div>

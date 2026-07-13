@@ -1,5 +1,7 @@
+import Cart from "./components/Cart";
+
 function page() {
-  return <div>page</div>;
+  return <Cart></Cart>;
 }
 
 export default page;
