@@ -1,20 +1,11 @@
+"use client";
+
 import { Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useTheme } from "@teispace/next-themes";
 
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setIsMounted] = useState(Boolean);
-
-  useEffect(() => {
-    // eslint-disable-next-line
-    setIsMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <div>
