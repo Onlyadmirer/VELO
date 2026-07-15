@@ -1,5 +1,7 @@
+import ProductsItem from "./components/ProductsItem";
+
 function page() {
-  return <div>page</div>;
+  return <ProductsItem></ProductsItem>;
 }
 
 export default page;
