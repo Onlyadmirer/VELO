@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
-interface ProductsType {
+export type ProductsType = {
+  id: number;
   name: string;
   stock: number;
   category: string;
   price: number;
   image: string;
-}
+};
 
 function ProductsItem() {
   const [datas, setDatas] = useState<ProductsType[]>([]);
@@ -42,8 +44,9 @@ function ProductsItem() {
   return (
     <div className='grid grid-cols-3 gap-8 p-6'>
       {datas.map((data) => (
-        <div
-          key={data.name}
+        <Link
+          key={data.id}
+          href={`/products/${data.id}`}
           className='flex flex-col dark:bg-neutral-800 h-96 w-70 gap-2 justify-between overflow-hidden rounded-sm'
         >
           <div className='relative h-full'>
@@ -60,7 +63,7 @@ function ProductsItem() {
             <p className='text-sm font-light'>{data.category}</p>
             <p>{toRupiah(data.price)}</p>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
