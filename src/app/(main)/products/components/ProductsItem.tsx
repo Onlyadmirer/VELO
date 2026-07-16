@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -41,13 +43,17 @@ function ProductsItem() {
     }).format(price);
   };
 
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className='grid grid-cols-3 gap-8 p-6'>
       {datas.map((data) => (
         <Link
           key={data.id}
           href={`/products/${data.id}`}
-          className='flex flex-col dark:bg-neutral-800 h-96 w-70 gap-2 justify-between overflow-hidden rounded-sm'
+          className='flex flex-col dark:bg-neutral-800 h-96 w-70 gap-2 justify-between overflow-hidden rounded-lg'
         >
           <div className='relative h-full'>
             <Image
@@ -62,6 +68,13 @@ function ProductsItem() {
             <p className='text-lg font-semibold'>{data.name}</p>
             <p className='text-sm font-light'>{data.category}</p>
             <p>{toRupiah(data.price)}</p>
+            <Button
+              onClick={(e) => handleButtonClick(e)}
+              className='flex flex-row gap-2 rounded-md'
+            >
+              <ShoppingBag />
+              Add to cart
+            </Button>
           </div>
         </Link>
       ))}
