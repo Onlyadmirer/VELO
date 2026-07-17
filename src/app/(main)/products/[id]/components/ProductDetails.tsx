@@ -7,6 +7,7 @@ import { ArrowLeft, ShoppingBag, PackageOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { toRupiah } from "@/store/Currency";
+import api from "@/lib/axios";
 
 function ProductDetails({ slug }: { slug: string }) {
   const [product, setProduct] = useState<ProductsType | null>(null);
@@ -17,12 +18,8 @@ function ProductDetails({ slug }: { slug: string }) {
     const getProduct = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/products/${slug}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        const result = await response.json();
-        setProduct(result);
+        const response = await api.get(`/product/${slug}`);
+        setProduct(response.data.data);
       } catch {
         setProduct(null);
       } finally {
