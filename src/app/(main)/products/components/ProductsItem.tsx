@@ -50,6 +50,7 @@ function ProductsItem() {
     e.stopPropagation();
     if (!user) {
       router.push("/login");
+      toast.error("Silahkan login terlebih dahulu");
       return;
     }
     try {

@@ -11,16 +11,18 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { loginUser } from "@/services/user.service";
+import { getUserProfile, loginUser } from "@/services/user.service";
 import { registForm } from "@/types/auth";
 import { toast } from "sonner";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/providers/AuthProvider";
 
 function Login() {
   const [visiblePass, setVisiblePass] = useState(false);
   const router = useRouter();
+  const { setUser } = useAuth();
 
   const {
     register,
@@ -35,6 +37,8 @@ function Login() {
       const response = await loginUser(formData);
       toast.success(response);
       reset();
+      const profile = await getUserProfile();
+      setUser(profile);
       router.push("/");
     } catch (error) {
       if (error instanceof Error) {
