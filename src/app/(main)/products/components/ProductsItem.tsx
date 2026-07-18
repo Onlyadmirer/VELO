@@ -8,9 +8,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import SkeletonCard from "./SkeletonCard";
-import { useAuth } from "@/providers/AuthProvider";
+import useProduct, { ButtonAddToCart } from "../service/useProduct";
 
 export type ProductsType = {
   id: number;
@@ -25,7 +24,8 @@ function ProductsItem() {
   const [datas, setDatas] = useState<ProductsType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+
+  const { addToCart } = useProduct();
 
   const router = useRouter();
 
@@ -45,25 +45,6 @@ function ProductsItem() {
 
     fetchProducts();
   }, []);
-
-  const handleButtonClick = async (e: React.MouseEvent, productId: number) => {
-    e.stopPropagation();
-    if (!user) {
-      router.push("/login");
-      toast.error("Silahkan login terlebih dahulu");
-      return;
-    }
-    try {
-      const res = await api.post("/cart", {
-        product_id: productId,
-        quantity: 1,
-      });
-      toast.success(res.data.message);
-    } catch (error) {
-      console.log(error);
-      toast.error("Gagal menambahkan ke keranjang");
-    }
-  };
 
   if (loading) {
     return (
@@ -147,7 +128,7 @@ function ProductsItem() {
           </Link>
           <div className='px-4 pb-4'>
             <Button
-              onClick={(e) => handleButtonClick(e, data.id)}
+              onClick={(e) => addToCart({ e, productId: data.id })}
               disabled={data.stock <= 0}
               className='w-full mb-4 rounded-lg gap-2'
               size='sm'
