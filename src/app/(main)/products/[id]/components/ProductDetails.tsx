@@ -8,11 +8,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { toRupiah } from "@/store/Currency";
 import api from "@/lib/axios";
+import useProduct from "../../service/useProduct";
 
 function ProductDetails({ slug }: { slug: string }) {
   const [product, setProduct] = useState<ProductsType | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  const { addToCart } = useProduct();
 
   useEffect(() => {
     const getProduct = async () => {
@@ -108,6 +111,7 @@ function ProductDetails({ slug }: { slug: string }) {
             <Button
               disabled={product.stock <= 0}
               className='w-full sm:w-auto gap-2'
+              onClick={(e) => addToCart({ e, productId: product.id })}
               size='lg'
             >
               <ShoppingBag className='size-5' />
