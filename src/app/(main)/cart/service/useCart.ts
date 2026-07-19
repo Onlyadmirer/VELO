@@ -2,7 +2,8 @@
 
 import api from "@/lib/axios";
 import { useAuth } from "@/providers/AuthProvider";
-import { useCallback, useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export type CartItem = {
@@ -29,7 +30,7 @@ export default function useCart() {
   useEffect(() => {
     const fetchCart = async () => {
       setLoading(true);
-      setError(null);
+      setError(null)
       try {
         const res = await api.get("/cart");
         setCartItems(res.data.data || []);
@@ -59,5 +60,15 @@ export default function useCart() {
     }
   };
 
-  return { cartItems, loading, error, deletingId, handleDeleteItem };
+  const handleClearCart = async () => {
+    try {
+      await api.delete("/cart")
+      setCartItems([])
+      toast.success("Berhasil hapus semau isi cart")
+    } catch {
+      toast.error("Gagal menghapus item");
+    }
+  }
+
+  return { cartItems, loading, error, deletingId, handleDeleteItem, handleClearCart };
 }

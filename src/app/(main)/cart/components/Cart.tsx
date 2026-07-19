@@ -15,34 +15,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import useCart from "../service/useCart";
-
-function CartSkeleton() {
-  return (
-    <div className='space-y-4 animate-pulse'>
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div
-          key={i}
-          className='flex gap-4 rounded-xl bg-card ring-1 ring-black/5 dark:ring-white/10 p-4'
-        >
-          <div className='size-24 rounded-lg bg-muted shrink-0' />
-          <div className='flex-1 space-y-3'>
-            <div className='h-5 w-1/2 rounded-lg bg-muted' />
-            <div className='h-4 w-1/4 rounded-lg bg-muted' />
-            <div className='h-5 w-1/3 rounded-lg bg-muted' />
-          </div>
-          <div className='h-9 w-20 rounded-lg bg-muted shrink-0' />
-        </div>
-      ))}
-    </div>
-  );
-}
+import CartSkeleton from "./Skeleton";
 
 function Cart() {
   const { user } = useAuth();
   const router = useRouter();
-  const { cartItems, loading, error, deletingId, handleDeleteItem } = useCart();
+  const {
+    cartItems,
+    loading,
+    error,
+    deletingId,
+    handleDeleteItem,
+    handleClearCart,
+  } = useCart();
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className='w-full h-full flex items-center justify-center'>
+        <p className='text-lg font-semibold'>Silahkan Login terlebih dahulu</p>
+      </div>
+    );
+  }
 
   const totalBelanja = cartItems.reduce(
     (sum, item) => sum + item.total_amount,
@@ -190,7 +183,11 @@ function Cart() {
           </p>
         </div>
         <div className='flex gap-3 mt-6'>
-          <Button variant='outline' className='flex-1 gap-2' disabled>
+          <Button
+            variant='outline'
+            className='flex-1 gap-2'
+            onClick={() => handleClearCart()}
+          >
             <Trash2 className='size-4' />
             Hapus Semua
           </Button>
