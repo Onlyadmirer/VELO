@@ -6,6 +6,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { toRupiah } from "@/store/Currency";
 import {
   AlertCircle,
+  Loader2,
   PackageOpen,
   RefreshCw,
   ShoppingCart,
@@ -15,6 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type CartItem = {
   id: number;
@@ -56,7 +58,21 @@ function Cart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const router = useRouter();
+
+  const handleDeleteItem = async (itemId: number) => {
+    setDeletingId(itemId);
+    try {
+      await api.delete(`/cart/${itemId}`);
+      setCartItems((prev) => prev.filter((item) => item.id !== itemId));
+      toast.success("Item berhasil dihapus");
+    } catch {
+      toast.error("Gagal menghapus item");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -205,9 +221,14 @@ function Cart() {
                 variant='ghost'
                 size='icon'
                 className='text-muted-foreground hover:text-destructive'
-                disabled
+                disabled={deletingId === item.id}
+                onClick={() => handleDeleteItem(item.id)}
               >
-                <Trash2 className='size-4' />
+                {deletingId === item.id ? (
+                  <Loader2 className='size-4 animate-spin' />
+                ) : (
+                  <Trash2 className='size-4' />
+                )}
               </Button>
             </div>
           </div>
