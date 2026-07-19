@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import api from "@/lib/axios";
 import { useAuth } from "@/providers/AuthProvider";
 import { toRupiah } from "@/store/Currency";
 import {
@@ -15,22 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-
-type CartItem = {
-  id: number;
-  cart_id: number;
-  quantity: number;
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-    category: string;
-  };
-  total_amount: number;
-};
+import useCart from "../service/useCart";
 
 function CartSkeleton() {
   return (
@@ -55,45 +39,8 @@ function CartSkeleton() {
 
 function Cart() {
   const { user } = useAuth();
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
   const router = useRouter();
-
-  const handleDeleteItem = async (itemId: number) => {
-    setDeletingId(itemId);
-    try {
-      await api.delete(`/cart/${itemId}`);
-      setCartItems((prev) => prev.filter((item) => item.id !== itemId));
-      toast.success("Item berhasil dihapus");
-    } catch {
-      toast.error("Gagal menghapus item");
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await api.get("/cart");
-        setCartItems(res.data.data || []);
-      } catch (err: unknown) {
-        const message =
-          err instanceof Error ? err.message : "Gagal memuat keranjang";
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (user) {
-      fetchCart();
-    }
-  }, [user]);
+  const { cartItems, loading, error, deletingId, handleDeleteItem } = useCart();
 
   if (!user) return null;
 
