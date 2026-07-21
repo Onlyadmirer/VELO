@@ -2,8 +2,8 @@
 
 import api from "@/lib/axios";
 import { useAuth } from "@/providers/AuthProvider";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 export type CartItem = {
@@ -31,6 +31,10 @@ export default function useCart() {
     const fetchCart = async () => {
       setLoading(true);
       setError(null)
+      if (!user) {
+        setError("Silahkan login terlebih dahulu")
+        return
+      }
       try {
         const res = await api.get("/cart");
         setCartItems(res.data.data || []);
@@ -70,5 +74,22 @@ export default function useCart() {
     }
   }
 
-  return { cartItems, loading, error, deletingId, handleDeleteItem, handleClearCart };
+  const idempotencyKey = useRef(uuidv4())
+
+  const checkOut = async () => {
+    try {
+      const response = await api.post("/checkout", {}, {
+        headers: { 'X-Idempotency-Key': idempotencyKey.current }
+      })
+      idempotencyKey.current = uuidv4();
+      setCartItems([])
+      console.log(response.data.data.redirect_url)
+      window.location.href = response.data.data.redirect_url
+    } catch (error) {
+      console.log(error)
+      toast.error("silahkan coba lagi nanti")
+    }
+  }
+
+  return { cartItems, loading, error, deletingId, handleDeleteItem, handleClearCart, checkOut };
 }

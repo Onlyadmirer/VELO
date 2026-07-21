@@ -9,9 +9,10 @@ const nextConfig: NextConfig = {
         hostname: 'res.cloudinary.com',
         port: '',
         pathname: '/**',
-      },
+      }
     ]
-  }
+  },
+  allowedDevOrigins: ['10.149.47.8'],
 };
 
 export default nextConfig;

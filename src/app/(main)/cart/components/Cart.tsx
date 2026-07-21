@@ -27,12 +27,16 @@ function Cart() {
     deletingId,
     handleDeleteItem,
     handleClearCart,
+    checkOut,
   } = useCart();
 
   if (!user) {
     return (
       <div className='w-full h-full flex items-center justify-center'>
         <p className='text-lg font-semibold'>Silahkan Login terlebih dahulu</p>
+        <Button variant={"link"} onClick={() => router.push("/login")}>
+          Log in
+        </Button>
       </div>
     );
   }
@@ -70,7 +74,7 @@ function Cart() {
             <AlertCircle className='size-8 text-destructive' />
           </div>
           <div>
-            <h3 className='text-lg font-semibold'>Gagal Memuat Keranjang</h3>
+            <h3 className='text-lg font-semibold'>gagal memuat keranjang</h3>
             <p className='text-sm text-muted-foreground mt-1'>{error}</p>
           </div>
           <Button onClick={router.refresh} variant='outline' className='gap-2'>
@@ -191,7 +195,7 @@ function Cart() {
             <Trash2 className='size-4' />
             Hapus Semua
           </Button>
-          <Button className='flex-1 gap-2' disabled>
+          <Button className='flex-1 gap-2' onClick={() => checkOut()}>
             <ShoppingCart className='size-4' />
             Checkout
           </Button>

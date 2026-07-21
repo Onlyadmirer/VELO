@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import SkeletonCard from "./SkeletonCard";
-import useProduct, { ButtonAddToCart } from "../service/useProduct";
+import useProduct from "../service/useProduct";
 
 export type ProductsType = {
   id: number;
