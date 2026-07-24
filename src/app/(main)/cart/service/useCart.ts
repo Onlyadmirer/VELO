@@ -16,6 +16,7 @@ export type CartItem = {
     price: number;
     image: string;
     category: string;
+    stock: number
   };
   total_amount: number;
 };
@@ -28,6 +29,8 @@ export default function useCart() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
+
     const fetchCart = async () => {
       setLoading(true);
       setError(null)
@@ -36,11 +39,19 @@ export default function useCart() {
         return
       }
       try {
-        const res = await api.get("/cart");
+        const res = await api.get("/cart", {
+          signal: abortController.signal
+        });
         setCartItems(res.data.data || []);
       } catch (err: unknown) {
-        const message =
-          err instanceof Error ? err.message : "Gagal memuat keranjang";
+        if (abortController.signal.aborted) return;
+        let message = "Gagal memuat keranjang";
+        if (err && typeof err === "object" && "response" in err) {
+          const axiosErr = err as { response?: { data?: { message?: string } } };
+          message = axiosErr.response?.data?.message || message;
+        } else if (err instanceof Error) {
+          message = err.message;
+        }
         setError(message);
       } finally {
         setLoading(false);
@@ -48,6 +59,7 @@ export default function useCart() {
     }
 
     fetchCart()
+    return () => abortController.abort();
   }, [user])
 
 
@@ -91,5 +103,33 @@ export default function useCart() {
     }
   }
 
-  return { cartItems, loading, error, deletingId, handleDeleteItem, handleClearCart, checkOut };
+
+  const debounceTimer = useRef<ReturnType<typeof setTimeout>>(null)
+
+  const handleUpdateQtyItem = (id: number, newQty: number) => {
+
+    if (debounceTimer.current) clearTimeout(debounceTimer.current)
+
+    setCartItems(prev => prev.map(item => item.id === id ? { ...item, quantity: newQty, total_amount: item.product.price * newQty } : item))
+
+    debounceTimer.current = setTimeout(async () => {
+      try {
+        await api.patch(`/cart/${id}`, {
+          quantity: newQty
+        })
+      } catch {
+        toast.error("gagal memperbarui jumbalh item")
+      }
+    }, 500);
+
+
+  }
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, []);
+
+  return { cartItems, loading, error, deletingId, handleDeleteItem, handleClearCart, checkOut, user, handleUpdateQtyItem };
 }

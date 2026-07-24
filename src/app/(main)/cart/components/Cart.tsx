@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/providers/AuthProvider";
 import { toRupiah } from "@/store/Currency";
 import {
   AlertCircle,
@@ -18,16 +17,17 @@ import useCart from "../service/useCart";
 import CartSkeleton from "./Skeleton";
 
 function Cart() {
-  const { user } = useAuth();
   const router = useRouter();
   const {
     cartItems,
     loading,
     error,
+    user,
     deletingId,
     handleDeleteItem,
     handleClearCart,
     checkOut,
+    handleUpdateQtyItem,
   } = useCart();
 
   if (!user) {
@@ -150,8 +150,24 @@ function Cart() {
                 </p>
               </div>
               <div className='flex items-center gap-2 text-sm'>
-                <span className='text-muted-foreground'>Qty:</span>
+                <Button
+                  variant={"outline"}
+                  onClick={() =>
+                    handleUpdateQtyItem(item.id, Math.max(1, item.quantity - 1))
+                  }
+                >
+                  -
+                </Button>
                 <span className='font-medium'>{item.quantity}</span>
+                <Button
+                  variant={"outline"}
+                  disabled={item.product.stock <= item.quantity}
+                  onClick={() =>
+                    handleUpdateQtyItem(item.id, item.quantity + 1)
+                  }
+                >
+                  +
+                </Button>
               </div>
             </div>
             <div className='flex flex-col items-end justify-between shrink-0'>
